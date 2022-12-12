@@ -1,18 +1,27 @@
 import { db } from "../datastore";
 import { ExpressHandler, Post } from "../types";
 import crypto from "crypto";
+import {
+  CreatePostRequest,
+  CreatePostResponse,
+  ListPostRequest,
+  ListPostResponse,
+} from "../api";
 
-export const listPostsHandler: ExpressHandler<{}, {}> = (req, res) => {
+export const listPostsHandler: ExpressHandler<
+  ListPostRequest,
+  ListPostResponse
+> = (req, res) => {
   res.send({ posts: db.listPosts() });
 };
-
-type CreatePostRequest = Pick<Post, "title" | "url" | "userId">;
-interface CreatePostResponse {}
 
 export const createPostHandler: ExpressHandler<
   CreatePostRequest,
   CreatePostResponse
 > = (req, res) => {
+  if (!req.body.title) {
+    return res.status(400).send("Title is Missing please Provide it..");
+  }
   if (!req.body.title || !req.body.url || !req.body.userId) {
     return res.sendStatus(400);
   }
