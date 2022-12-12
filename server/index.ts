@@ -1,5 +1,5 @@
 import express, { RequestHandler } from "express";
-import { db } from "./datastore";
+import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
 
 const app = express();
 
@@ -12,14 +12,8 @@ const requestHandler: RequestHandler = (req, res, next) => {
 };
 app.use(requestHandler);
 
-app.get("/posts", (req, res) => {
-  res.send({ posts: db.listPosts() });
-});
+app.get("/posts", listPostsHandler);
 
-app.post("/posts", (req, res, next) => {
-  const post = req.body;
-  db.createPost(post);
-  res.sendStatus(200);
-});
+app.post("/posts", createPostHandler);
 
 app.listen(1337);
