@@ -18,6 +18,7 @@
 | Email | STRING |
 | Username | STRING |
 
+
 > ### Posts
 
 | Column | Type |
