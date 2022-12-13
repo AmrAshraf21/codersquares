@@ -11,17 +11,18 @@ import {
 export const listPostsHandler: ExpressHandler<
   ListPostRequest,
   ListPostResponse
-> = (req, res) => {
-  res.send({ posts: db.listPosts() });
+> =async(req, res) => {
+  res.send({ posts: await db.listPosts() });
 };
 
 export const createPostHandler: ExpressHandler<
   CreatePostRequest,
   CreatePostResponse
-> = (req, res) => {
-  if (!req.body.title) {
-    return res.status(400).send("Title is Missing please Provide it..");
-  }
+> = async (req, res) => {
+  //TODO FOR User Exists
+  //Todo get Userid from session
+  //TODO Validate title and url not empty
+  //TODO validate url is new or add a url to existing post
   if (!req.body.title || !req.body.url || !req.body.userId) {
     return res.sendStatus(400);
   }
@@ -32,6 +33,6 @@ export const createPostHandler: ExpressHandler<
     url: req.body.url,
     userId: req.body.userId,
   };
-  db.createPost(post);
-  res.sendStatus(200);
+  await db.createPost(post);
+  return res.sendStatus(200);
 };

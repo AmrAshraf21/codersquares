@@ -1,6 +1,6 @@
 import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
-
+import asyncHandler from "express-async-handler"; 
 const app = express();
 
 app.use(express.json());
@@ -12,9 +12,9 @@ const requestHandler: RequestHandler = (req, res, next) => {
 };
 app.use(requestHandler);
 
-app.get("/v1/posts", listPostsHandler);
+app.get("/v1/posts",asyncHandler(listPostsHandler));
 
-app.post("/v1/posts", createPostHandler);
+app.post("/v1/posts",asyncHandler(createPostHandler));
 
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   console.error("Uncaught exception💥", error);
@@ -24,4 +24,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
 };
 app.use(errorHandler);
 
-app.listen(1337);
+app.listen(1337,()=>{
+    console.log("Server Running💥👌");
+    
+});
