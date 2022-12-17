@@ -5,7 +5,7 @@ export class inMemoryDataStore implements Datastore {
   private posts: Post[] = [];
   private comments: Comment[] = [];
   private likes: Like[] = [];
-
+  
   createComment(comment: Comment): Promise<void> {
     this.comments.push(comment);
     return Promise.resolve();
@@ -20,6 +20,9 @@ export class inMemoryDataStore implements Datastore {
     }
     this.comments.splice(index, 1);
     return Promise.resolve();
+  }
+  getUserById(id: string): Promise<User | undefined> {
+    return Promise.resolve(this.users.find(u => u.id ===id ));
   }
   createUser(user: User): Promise<void> {
     this.users.push(user);

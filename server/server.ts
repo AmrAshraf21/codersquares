@@ -2,32 +2,32 @@ import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
 import asyncHandler from "express-async-handler";
 import { initDb } from "./datastore";
+import { signInHandlers, signupHandlers } from "./handlers/authHandlers";
+import { requestHandler } from "./middleware/loggerMiddlerware";
+import { errorHandler } from "./middleware/errorMiddleware";
+import dotenv from 'dotenv'
+import { authMiddleware } from "./middleware/authMiddleware";
 
 (async () => {
 
     await initDb();
+    dotenv.config();
 
   const app = express();
 
   app.use(express.json());
 
-  const requestHandler: RequestHandler = (req, res, next) => {
-    console.log(`${req.method}, ${req.path} , ${JSON.stringify(req.body)}`);
-
-    next();
-  };
   app.use(requestHandler);
+
+  app.post('/v1/signup',asyncHandler(signupHandlers))
+  app.post('/v1/signin',asyncHandler(signInHandlers));
+  app.use(authMiddleware);
 
   app.get("/v1/posts", asyncHandler(listPostsHandler));
 
   app.post("/v1/posts", asyncHandler(createPostHandler));
 
-  const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-    console.error("Uncaught exception💥", error);
-    return res
-      .status(500)
-      .send("oops,an unexpected error occurred please try again later");
-  };
+  
   app.use(errorHandler);
 
   app.listen(1337, () => {

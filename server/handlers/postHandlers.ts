@@ -12,7 +12,9 @@ export const listPostsHandler: ExpressHandler<
   ListPostRequest,
   ListPostResponse
 > =async(req, res) => {
-  res.send({ posts: await db.listPosts() });
+  console.log(req.headers.authorization);
+  
+ return res.send({ posts: await db.listPosts() });
 };
 
 export const createPostHandler: ExpressHandler<
