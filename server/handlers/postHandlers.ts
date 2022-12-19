@@ -25,7 +25,7 @@ export const createPostHandler: ExpressHandler<
   //Todo get Userid from session
   //TODO Validate title and url not empty
   //TODO validate url is new or add a url to existing post
-  if (!req.body.title || !req.body.url || !req.body.userId) {
+  if (!req.body.title || !req.body.url) {
     return res.sendStatus(400);
   }
   const post: Post = {
@@ -33,7 +33,7 @@ export const createPostHandler: ExpressHandler<
     postedAt: Date.now(),
     title: req.body.title,
     url: req.body.url,
-    userId: req.body.userId,
+    userId:res.locals.userId,
   };
   await db.createPost(post);
   return res.sendStatus(200);

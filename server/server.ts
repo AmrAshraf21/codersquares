@@ -12,7 +12,7 @@ import { authMiddleware } from "./middleware/authMiddleware";
 
     await initDb();
     dotenv.config();
-
+    
   const app = express();
 
   app.use(express.json());
